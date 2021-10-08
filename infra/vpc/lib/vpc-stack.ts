@@ -1,22 +1,23 @@
-import ec2 = require('@aws-cdk/aws-ec2');
-import ecs = require('@aws-cdk/aws-ecs');
-import ecs_patterns = require('@aws-cdk/aws-ecs-patterns');
+import * as ec2 from '@aws-cdk/aws-ec2';
+import * as ecr from '@aws-cdk/aws-ecr';
+import * as ecs from '@aws-cdk/aws-ecs';
+import * as ecs_patterns from '@aws-cdk/aws-ecs-patterns';
 import * as cdk from '@aws-cdk/core';
 
 export class VpcStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // Create VPC and Fargate Cluster
-    // NOTE: Limit AZs to avoid reaching resource quotas
     const vpc = new ec2.Vpc(this, 'MyVpc', { maxAzs: 2 });
     const cluster = new ecs.Cluster(this, 'Cluster', { vpc });
 
-    // Instantiate Fargate Service with just cluster and image
+    const repository = new ecr.Repository(this, 'myRepository');
+
     new ecs_patterns.ApplicationLoadBalancedFargateService(this, "FargateService", {
       cluster,
       taskImageOptions: {
-        image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+        // image: ecs.ContainerImage.fromRegistry("amazon/amazon-ecs-sample"),
+        image: ecs.ContainerImage.fromEcrRepository(repository)
       },
     });
   }
