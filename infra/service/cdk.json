@@ -18,21 +18,11 @@
     "project": "",
     "serviceName": "",
     "repository": "",
-    "stg": {
-      "account": "",
-      "region": "",
-      "vpcId": "",
-      "securityGroupId": "",
-      "clusterName": "",
-      "targetGroupArn": ""
-    },
-    "prd": {
-      "account": "",
-      "region": "",
-      "vpcId": "",
-      "securityGroupId": "",
-      "clusterName": "",
-      "targetGroupArn": ""
-    }
+    "account": "",
+    "region": "",
+    "vpcId": "",
+    "securityGroupId": "",
+    "clusterName": "",
+    "targetGroupArn": ""
   }
 }
