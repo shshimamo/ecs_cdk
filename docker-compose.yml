@@ -33,6 +33,16 @@ services:
     ports:
       - 5000:3000 # ポートフォワード
 
+  frontend:
+    container_name: front
+    build: ./frontend/
+    image: frontend
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 3000:3000
+    command: "npm run dev"
+
 volumes:
   mysql_data:
   bundle_data:
