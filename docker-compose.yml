@@ -16,7 +16,7 @@ services:
     container_name: backend
     build: ./backend/
     image: backend
-    command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+#    command: /bin/sh -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     tty: true
     stdin_open: true
     volumes:
@@ -32,6 +32,7 @@ services:
       - db
     ports:
       - 5000:3000 # ポートフォワード
+      - 80:80 # ポートフォワード
 
   frontend:
     container_name: front

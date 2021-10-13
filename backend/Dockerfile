@@ -4,19 +4,27 @@ ENV LANG C.UTF-8
 ENV TZ Asia/Tokyo
 
 RUN apt-get update && \
-    apt-get install -y build-essential
+    apt-get install -y build-essential vim nginx sudo
 
 RUN gem install bundler
 
 WORKDIR /app
 
-COPY --chown=rails Gemfile Gemfile.lock /app/
-
+# Dockerのビルドステップキャッシュを利用するため先にGemfileを転送し、bundle installする
+COPY Gemfile Gemfile.lock /app/
 RUN bundle install
 
-#実行時にコマンド指定が無い場合に実行されるコマンド
-CMD ["bin/rails", "s", "-b", "0.0.0.0"]
+COPY . /app
 
-### BUID ###
-# docker build -t myrailsapp . # myrailsappは任意の名前
-# docker run -p 3000:3000 myrailsapp
+RUN mkdir -p tmp/sockets
+RUN mkdir tmp/pids
+
+# nginx
+RUN groupadd nginx
+RUN useradd -g nginx nginx
+ADD nginx/nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 80
+
+RUN chmod +x /app/entrypoint.sh
+CMD ["/app/entrypoint.sh"]
